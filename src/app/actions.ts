@@ -120,6 +120,7 @@ export async function getOrgUserList() {
   })
   const users = res.data.map(u => {
     return {
+      id: u.id,
       name: u.fullName ?? u.primaryEmailAddress?.emailAddress,
       avatar: u.imageUrl
     }

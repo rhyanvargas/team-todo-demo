@@ -5,7 +5,7 @@ import { FiCircle, FiCheckCircle } from "react-icons/fi";
 import { Task, getChatUsersForLiveblocks, getOrgUserList, setTaskState, updateTask } from './actions';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import {
   LiveblocksProvider,
@@ -44,17 +44,18 @@ function TaskRow({ task, disabled }: Props) {
         onClick={onCheckClicked}>
         { isDone ? <FiCheckCircle /> : <FiCircle /> }
       </Button>
+
       <Dialog>
         <DialogTrigger asChild>
           <Button variant="link" className={`flex-1 justify-start ${isDone && 'line-through'}`}>
             {task.name}
           </Button>
         </DialogTrigger>
-        <DialogContent className="md:min-w-[800px] h-[80%]">
+        <DialogContent className="md:min-w-[800px] h-[80%] flex flex-col">
           <DialogTitle>
             Edit task
           </DialogTitle>
-          <div className="grid md:grid-cols-1 gap-2 h-full">
+          <div className="h-full overflow-scroll overflow-x-hidden flex flex-col gap-2 p-2">
             <form onSubmit={onSubmit} className='flex flex-col gap-2'>
               <Label htmlFor="name">Name</Label>
               <Input type='text' name='name' defaultValue={task.name as string} disabled={disabled} />
@@ -62,9 +63,14 @@ function TaskRow({ task, disabled }: Props) {
               <Textarea name='description' defaultValue={task.description as string} disabled={disabled} />
               <Button type='submit' disabled={disabled}>Save</Button>
             </form>
-            <ChatRoom taskId={task.id}>
-              <CollaborativeApp />
-            </ChatRoom>
+            <h2 className="text-sm font-semibold">
+              Comments
+            </h2>
+            <div>
+              <ChatRoom taskId={task.id}>
+                <CollaborativeApp />
+              </ChatRoom>
+            </div>
           </div>
         </DialogContent>
       </Dialog>
@@ -93,18 +99,14 @@ function ChatRoom({ taskId, children }: {
     fetchOrgUsers()
   }, [fetchOrgUsers])
 
+  // This fires when comments load and associates the Clerk user with the Liveblocks comments
   async function resolveUsers({ userIds }: {
     userIds: string[]
   }): Promise<any> {
-    // TODO: Remove this and just resolve using the fetched org user data
-    console.log("resolveUsers")
-    // const users = await getChatUsersForLiveblocks(userIds)
-    // console.log("users", users)
-    // return users
-
     return userIds.map(uid => orgUsers.find(u => u.id === uid) ?? null)
   }
 
+  // This fires when you try to @ someone from within the comment
   async function resolveMentionSuggestions({ text }: {
     text: string
   }): Promise<any> {
@@ -142,7 +144,7 @@ export function CollaborativeApp() {
     <div className='flex flex-col gap-2'>
       {threads.map((thread) => (
         <Thread
-          className='border border-slate-500 rounded-lg'
+          className='border border-slate-200 rounded-lg'
           key={thread.id}
           thread={thread} />
       ))}

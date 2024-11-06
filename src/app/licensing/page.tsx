@@ -18,7 +18,8 @@ async function Licensing() {
   const { sessionClaims } = auth()
 
   // Load license count
-  const currentLicenseCount = await getLicenseCount(sessionClaims?.org_id as string)
+  // const currentLicenseCount = await getLicenseCount(sessionClaims?.org_id as string)
+  const currentLicenseCount = 5
   let currentlyLicensedUsers = 0
 
   // Load users
