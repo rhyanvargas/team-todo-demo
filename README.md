@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Team Task Demo
 
-## Getting Started
+A collaborative task management application built with modern web technologies. This app allows teams to manage tasks, track progress, and collaborate effectively.
 
-First, run the development server:
+## Tech Stack
+
+- **Frontend**: Next.js 14, React 18, TailwindCSS
+- **Backend**: Next.js API Routes
+- **Database**: NeonDB (Postgres)
+- **Authentication**: Clerk
+- **ORM**: DrizzleORM
+- **Payment Processing**: Stripe
+- **Development Tools**: TypeScript, ngrok for tunneling
+
+## Prerequisites
+
+- Node.js 18+
+- yarn or npm
+- ngrok account with authtoken
+- Clerk account
+- NeonDB account
+- Stripe account (for payments)
+
+## Installation
+
+1. Clone the repository
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repository-url>
+cd team-task-demo
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn install
+# or
+npm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+3. Set up environment variables
 
-## Learn More
+```bash
+cp .env.sample .env.local
+```
 
-To learn more about Next.js, take a look at the following resources:
+Edit `.env.local` with your credentials:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+#### Clerk Authentication
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Get from [Clerk Dashboard](https://dashboard.clerk.dev):
+  - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+  - `CLERK_SECRET_KEY`
 
-## Deploy on Vercel
+#### Database
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Get from [NeonDB Dashboard](https://console.neon.tech):
+  - `DATABASE_URL`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+#### Stripe
+
+- Get from [Stripe Dashboard](https://dashboard.stripe.com/apikeys):
+  - `STRIPE_SECRET_KEY`
+  - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
+- Set up webhook in Stripe Dashboard to get:
+  - `STRIPE_WEBHOOK_SECRET`
+
+#### App Config
+
+- `NEXT_PUBLIC_APP_URL`: Local development URL
+- `NEXT_PUBLIC_NGROK_URL`: Your ngrok domain (e.g., your-domain.ngrok-free.app)
+
+4. Configure ngrok
+
+```bash
+ngrok config add-authtoken your_auth_token
+```
+
+## Development
+
+1. Initialize the database
+
+```bash
+yarn db:generate
+yarn db:apply
+```
+
+2. Start the development server
+
+```bash
+yarn dev
+```
+
+This will:
+
+- Start the Next.js development server
+- Create a public ngrok URL for webhook testing
+- Auto-reload on code changes
+
+Access the app at:
+
+- Local: http://localhost:3000
+- Public URL: Your ngrok URL (shown in terminal)
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+[MIT](LICENSE)
